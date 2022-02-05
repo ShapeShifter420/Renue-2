@@ -20,7 +20,7 @@ public class RawResult implements Comparable<RawResult>{
         while(rawString[pos+offset] == o.rawString[o.pos+offset] && rawString[pos+offset] != ',')
         {
             offset+=1;
-            if(pos+offset == minlen) return 0;
+            if(pos+offset == minlen || o.pos + offset == minlen) return 0;
         }
         return rawString[pos+offset] - o.rawString[o.pos+offset];
     }
