@@ -52,9 +52,9 @@ public class AReader implements IReader {
 
                     if (endfind != -1){
                         if (startline / offset != endline / offset)
-                            result.add(new FoundString(startline,(int)(endfind-startline-word.length()),endline));
+                            result.add(new FoundString(startline + 1,(int)(endfind-startline-word.length()),endline));
                         else
-                            result.add(new FoundString((iendfind-istart-word.length()), Arrays.copyOfRange(buffarray, istart, iend)));
+                            result.add(new FoundString((iendfind-istart-word.length()), Arrays.copyOfRange(buffarray, istart+1, iend)));
                         endfind = -1;
                     }
 
