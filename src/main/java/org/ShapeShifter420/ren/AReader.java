@@ -11,6 +11,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class AReader implements IReader {
@@ -22,7 +23,7 @@ public class AReader implements IReader {
     }
     public List<IFoundString> run() {
         List<IFoundString> result = new ArrayList<>();
-        int bufferSize = 4096;
+        int bufferSize = 8192;
         try {
             if (bufferSize > fileChannel.size()) {
                 bufferSize = (int) fileChannel.size();
@@ -34,6 +35,9 @@ public class AReader implements IReader {
         ReturnSignalsEnum value;
         long startline;
         long endfind = -1;
+        int istart;
+        int iend =0;
+        int iendfind = 0;
         long endline = 0;
         while (fileChannel.read(buff) > 0) {
             buffarray = buff.array();
@@ -43,15 +47,21 @@ public class AReader implements IReader {
                 if (value == ReturnSignalsEnum.NewLineSignal) {
                     startline = endline;
                     endline = pos + offset;
+                    istart = iend;
+                    iend = pos;
 
                     if (endfind != -1){
-                        result.add(new FoundString(startline,(int)(endfind-startline-word.length()),pos+offset));
+                        if (startline / offset != endline / offset)
+                            result.add(new FoundString(startline,(int)(endfind-startline-word.length()),endline));
+                        else
+                            result.add(new FoundString((iendfind-istart-word.length()), Arrays.copyOfRange(buffarray, istart, iend)));
                         endfind = -1;
                     }
 
                 }
                 else if (value == ReturnSignalsEnum.FoundSignal){
                     endfind = pos+offset;
+                    iendfind = pos;
                 }
             }
             offset += buff.position();

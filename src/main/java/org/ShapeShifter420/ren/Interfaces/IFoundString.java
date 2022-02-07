@@ -6,4 +6,6 @@ public interface IFoundString {
     long getStartPos();
 
     long getEndPos();
+
+    byte[] getPreString();
 }

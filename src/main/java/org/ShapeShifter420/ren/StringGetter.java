@@ -15,6 +15,7 @@ public class StringGetter implements IStringGetter {
         Channel = channel;
     }
     public RawResult getString(IFoundString fs) throws IOException {
+        if (fs.getEndPos() == 0) return new RawResult(fs.getPreString(), fs.getFindPos() );
 
         ByteBuffer buff = ByteBuffer.allocate((int)(fs.getEndPos()- fs.getStartPos()));
         Channel.read(buff,fs.getStartPos());
